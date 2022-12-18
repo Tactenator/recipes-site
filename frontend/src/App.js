@@ -3,6 +3,7 @@ import Footer from './components/footer';
 import Navbar from './components/navbar';
 import Home from './pages/home'; 
 import Login from './pages/login'
+import Recipes from './pages/recipes';
 import Signup from './pages/signup';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path='/' exact element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path='/recipes' element={<Recipes />} />
         </Routes>
         <Footer />
       </Router>
