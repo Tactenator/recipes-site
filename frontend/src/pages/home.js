@@ -1,7 +1,7 @@
 const Home = () => {
     return ( 
         <div>
-            Penis in my ass - Home
+            Home
         </div>
      );
 }
