@@ -24,7 +24,8 @@ app.use(function (req, res, next) {
     });
 
 
-// app.use('/recipes', recipesRoutes);
+app.use('/recipes', recipesRoutes);
+app.use('/users', userRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
