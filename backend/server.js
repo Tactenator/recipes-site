@@ -4,7 +4,7 @@ require('dotenv').config({path:__dirname+'/.env'});
 const cors = require('cors')
 
 const recipesRoutes = require('./router/recipes');
-// const userRoutes = require('./router/users'); 
+const userRoutes = require('./router/users'); 
 
 
 const app = express(); 
