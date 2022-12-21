@@ -5,14 +5,14 @@ const Signup = () => {
 
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
-    const [ signup, isLoading, error ] = useSignup
+    const { signup, isLoading, error }  = useSignup(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         await signup(email, password)
         
-        console.log(email, password)
+        console.log(error)
     }
 
     return ( 
@@ -22,17 +22,18 @@ const Signup = () => {
                 <label>Email:</label>
                 <input type="email"
                 onChange={(e) => setEmail(e.target.value)}
-                value='email'>
+                value={email}>
                 </input>
 
                 <label>Password:</label>
                 <input type="password"
                 onChange={(e) => setPassword(e.target.value)}
-                value='password'>
+                value={password}>
                 </input>
 
-                <button>Sign Up</button>
+                <button disabled={isLoading}>Sign Up</button>
             </form>
+            {error && <div className='error'>{error}</div>}
         </div>
      );
 }
