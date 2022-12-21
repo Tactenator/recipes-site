@@ -1,5 +1,4 @@
 import { createContext, useReducer } from 'react';
-import { AuthContextProvider } from './AuthContext';
 
 export const RecipesContext = createContext()
 
@@ -20,9 +19,9 @@ export const RecipesContextProvider = ({ children }) => {
     })
 
     return (
-        <AuthContext.Provider value={{...state, dispatch}}>
+        <RecipesContext.Provider value={{...state, dispatch}}>
             {children}
-        </AuthContext.Provider>
+        </RecipesContext.Provider>
     )
 }
 
