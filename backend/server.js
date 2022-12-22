@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config({path:__dirname+'/.env'});
 const cors = require('cors')
+const morgan = require('morgan');
 
 const recipesRoutes = require('./router/recipes');
 const userRoutes = require('./router/users'); 
@@ -11,8 +12,8 @@ const app = express();
 
 //middleware
 app.use(express.json());
-
 app.use(cors());
+app.use(morgan('dev'));
 
 
 app.use(function (req, res, next) {
