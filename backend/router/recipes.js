@@ -1,7 +1,10 @@
 const express = require('express')
 const recipeControl = require('../controller/recipeControl')
+const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router(); 
+
+router.use(requireAuth)
 
 //get recipes 
 router.get('/', recipeControl.getAllRecipes); 
