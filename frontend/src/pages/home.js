@@ -5,7 +5,7 @@ const Home = () => {
         <div id="container">
             <h1>Home</h1>
             <div className='home-image'>
-                <img src={HomeImg} alt="Home image"></img>
+                <img src={HomeImg} alt="Home "></img>
             </div>
         </div>
      );

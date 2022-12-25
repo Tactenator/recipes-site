@@ -23,10 +23,10 @@ const Navbar = () => {
                 <Link to='/'><li>Home</li></Link>
                 <Link to='/recipes'><li>Recipes</li></Link>
                 {!user && (
-                    <div>
+                    <ul>
                         <Link to='/users/login'><li>Login</li></Link>
                         <Link to='/users/signup'><li>Signup</li></Link>
-                    </div>
+                    </ul>
                 )}
             </ul>
         </div>
