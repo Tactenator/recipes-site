@@ -38,6 +38,54 @@ body {
   height: auto; 
 }
 
+.create-container h2 {
+  text-align: center;
+}
+
+.create-recipe {
+  display: flex; 
+  flex-direction: column; 
+  width: 70rem; 
+  justify-content: flex-end;
+  float: right; 
+  gap: 30rem;  
+  padding: 1em; 
+}
+
+.create-form input {
+  width: 20rem; 
+}
+
+.recipe-carousel { 
+  display: flex; 
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.recipe-carousel label {
+  text-align: left;
+  width: 10rem; 
+  padding: 1rem; 
+  margin-right: 12rem; 
+  font-size: 1vw; 
+}
+
+.recipe-carousel input {
+  padding: 1rem; 
+  font-size: 1rem; 
+
+}
+
+.recipe-carousel button {
+  width: 5rem; 
+}
+
+.ingredients-add {
+  display: flex; 
+  justify-content: flex-start;
+}
+
 #footer {
   display: flex; 
   position: absolute;
@@ -49,4 +97,8 @@ body {
   height: 25vh; 
   background: #151E3F;
   color: #F2F3D9;
+}
+
+.hide {
+  display: none; 
 }
