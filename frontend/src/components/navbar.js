@@ -22,6 +22,7 @@ const Navbar = () => {
             <ul>
                 <Link to='/'><li>Home</li></Link>
                 <Link to='/recipes'><li>Recipes</li></Link>
+                <Link to='/createRecipes'>New Recipe</Link>
                 {!user && (
                     <ul>
                         <Link to='/users/login'><li>Login</li></Link>
