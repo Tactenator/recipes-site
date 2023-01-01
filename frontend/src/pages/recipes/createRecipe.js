@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 const CreateRecipe = () => {
 
@@ -6,43 +7,137 @@ const CreateRecipe = () => {
     const [ author, setAuthor ] = useState('')
     const [ description, setDescription ] = useState('')
     const [ time, setTime ] = useState('')
+    const [ oldNumber, setOldNumber ] = useState(0)
     const [ numOfIngredients, setNumOfIngredients ] = useState()
-    const [ ingredients, setIngredients ] = useState()
-    const [ instructions, setInstructions ] = useState()
+    const [ ingredients, setIngredients ] = useState([])
+    const [ instructions, setInstructions ] = useState([])
     const [ notes, setNotes ] = useState('')
+    const [count, setCount ] = useState(0)
     const [ displayed, setDisplayed ] = useState(); 
 
     const displayArr = []; 
-    const ingredientArr = [];
-    const instructionsArr = [];
+    let ingredientArr = [];
+    let instructionsArr = [];
+    const ingredientEl = useRef(null)
+    const instructionsRef = useRef(null)
+
+    const {user} = useAuthContext()
+    
 
     useEffect(() => {
-        const one = document.querySelector('.one')
-        const two = document.querySelector('.two')
-        const three = document.querySelector('.three')
+        if(displayArr.length === 0) {
+            const one = document.querySelector('.one')
+            const two = document.querySelector('.two')
+            const three = document.querySelector('.three')
+            const four = document.querySelector('.recipe-preview')
+            displayArr.push(one, two, three, four)
+            setDisplayed(displayArr[count])
+        }
+        setOldNumber(parseInt(numOfIngredients))
+        handleIngredients(oldNumber)
 
-        displayArr.push(one, two, three)
+    }, [ numOfIngredients ])
 
-        setDisplayed(displayArr[0])
-    }, [])
+    const handleBack = (e) => {
+        e.preventDefault(); 
 
-    const handleBack = () => {
+        setCount(oldCount => oldCount - 1 )
 
+        setDisplayed(displayArr[count])
     }
 
-    const handleNext = () => {
-        
+    const handleNext = (e) => {
+        e.preventDefault(); 
+        setCount(oldCount => oldCount + 1 )
+        setDisplayed(displayArr[count])
     }
 
-    const handleSubmit = () => {
-        
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const recipe = { name, author, description, time, ingredients, instructions, notes }
+
+        const response = await fetch('http://localhost:4000/recipes', {
+            method: 'POST',
+            body: JSON.stringify(recipe), 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
+
+        const json = await response.json();
+
+        if(!response.ok) {
+            console.log('The following error occurred: ' + json.error)
+        }
+        if(response.ok){
+            console.log('New Recipe Added!')
+        }
+    }
+
+    const handleIngredients = (e) => {
+        const parentDiv = ingredientEl.current;
+        let num = 0; 
+        if(e < numOfIngredients || e > numOfIngredients){
+            switch(e !== numOfIngredients) {
+                case (e < numOfIngredients):
+                    // add more divs based on difference between the two numbers
+                    num = numOfIngredients - e; 
+                    for(let i = 0; i < num; i++){
+                        const newInput = document.createElement("input");
+                        newInput.setAttribute("type", "text")
+                        parentDiv.appendChild(newInput)
+                    }
+                    return
+                case ( e > numOfIngredients):
+                    // remove excess input divs based on difference between the two numbers
+                    num = e - numOfIngredients;
+                    for(let i = 0; i < num; i++){
+                        parentDiv.removeChild(parentDiv.lastElementChild)
+                    }
+                    return
+                default: 
+                    return
+            }
+        }
+        else {
+            for(let i = 0; i < numOfIngredients - 1; i++){
+                const newInput = document.createElement("input");
+                newInput.setAttribute("type", "text")
+                parentDiv.appendChild(newInput)
+            }
+        }
+    }
+
+    const addNewInstruction = (e) => {
+        e.preventDefault()
+        const parentDiv = instructionsRef.current;
+        const newInput = document.createElement("input");
+        newInput.setAttribute("type", "text")
+        parentDiv.appendChild(newInput)
+    }
+
+    const compileRecipe = (e) => {
+        e.preventDefault()
+        let ingredientsNode = ingredientEl.current.childNodes; 
+        let instructionsNode = instructionsRef.current.childNodes; 
+        instructionsArr = Array.from(instructionsNode)
+        ingredientArr = Array.from(ingredientsNode)
+        ingredientArr.forEach(ingredient => {
+            setIngredients(ingredients => [...ingredients, ingredient.value])
+        })
+        instructionsArr.forEach(instruction => {
+            setInstructions(instructions => [...instructions, instruction.value])
+        })
+        handleNext(e)
     }
 
     return ( 
         <div className='create-container'>
             <h2>Your New Recipe</h2>
             <form className='create-form'>
-                <div className='recipe-carousel one'>
+                <div className={count === 0 ? 'recipe-carousel one' : 'recipe-carousel one hide'}>
                     <label>Name:</label>
                     <input type='text' 
                     onChange={((e) => setName(e.target.value))}
@@ -61,39 +156,71 @@ const CreateRecipe = () => {
                     <input type='text' 
                     onChange={((e) => setTime(e.target.value))}
                     value={time}></input>
-                    <button onClick={handleNext} className='next-button'>Next</button>
+                    <button onClick={((e) => handleNext(e))} className='next-button'>Next</button>
                 </div>
-                <div className='recipe-carousel two hide'>
-                    <label>Number of Ingredients:</label>
-                    <input type='text' 
-                    onChange={((e) => setNumOfIngredients(e.target.value))}
-                    value={numOfIngredients}></input>
-
-                    <div id='ingredients'>
-                        <label>Ingredients:</label>
-                        <div className='ingredients-add'>
-                        <input type='text' 
-                        onChange={((e) => setIngredients(e.target.value))}
-                        value={ingredients}></input>
-                        </div>
+                <div className={count === 1 ? 'recipe-carousel two' : 'recipe-carousel two hide'}>
+                    <div className='number-dropdown'>
+                        <label>Number of Ingredients:</label>
+                        <select  
+                        onChange={((e) => {
+                            setNumOfIngredients(e.target.value) 
+                        })}
+                        value={numOfIngredients}>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                            <option value={8}>8</option>
+                            <option value={9}>9</option>
+                            <option value={10}>10</option>
+                            <option value={11}>11</option>
+                            <option value={12}>12</option>
+                            <option value={13}>13</option>
+                            <option value={14}>14</option>
+                            <option value={15}>15</option>
+                        </select>
                     </div>
-                    <div className='form-buttons'>
-                        <button onClick={handleBack} className='back-button'>Back</button>
-                        <button onClick={handleNext} className='next-button'>Next</button>
+                    <label>Ingredients:</label>
+                    <div ref={ingredientEl} id='ingredients'>
+                        <input type='text'></input>
                     </div>
+                    <button onClick={((e) => handleNext(e))} className='next-button'>Next</button>
+                    <button onClick={((e) => handleBack(e))} className='back-button'>Back</button>
                 </div>
                 
-                <div className='recipe-carousel three hide'>
+                <div className={count === 2 ? 'recipe-carousel three' : 'recipe-carousel three hide'}>
+                    <button onClick={((e) => addNewInstruction(e))}>+</button>
                     <label>Instructions:</label>
-                    <input type='text' 
-                    onChange={((e) => setInstructions(e.target.value))}
-                    value={instructions}></input>
-                    <label>Notes:</label>
-                    <input type='text' 
-                    onChange={((e) => setNotes(e.target.value))}
-                    value={notes}></input>
-                    <button onClick={handleBack} className='back-button'>Back</button>
-                    <button onClick={handleSubmit} type='submit'>Add Recipe</button>
+                    <div ref={instructionsRef} id='instructions'>
+                        <input type='text'></input>
+                    </div>
+                    <div id='notes'>
+                        <label>Notes:</label>
+                        <textarea rows={10} cols={89} type='text' value={notes} onChange={((e) => setNotes(e.target.value))}></textarea>
+                    </div>
+                    <button onClick={((e) => compileRecipe(e))}>Review Recipe</button>
+                    <button onClick={((e) => handleBack(e))} className='back-button'>Back</button>
+                </div>
+                <div className={count === 3 ? 'recipe-preview' : 'recipe-preview hide'}>
+                    <h1>{name}</h1>
+                    <h3>{author}</h3>
+                    <h4>{description} - {time}</h4>
+                    {ingredients.map(item => (
+                        <ul>
+                            <li>{item}</li>
+                        </ul>
+                    ))}
+                    {instructions.map(item => (
+                        <ol>
+                            <li>{item}</li>
+                        </ol>
+                    ))}
+                    <p>{notes}</p>
+                    <button type='submit' onClick={((e) => handleSubmit(e))}>Add New Recipe</button>
+                    <button onClick={((e) => handleBack(e))} className='back-button'>Back</button>
                 </div>
             </form>
         </div>
