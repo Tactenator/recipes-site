@@ -120,6 +120,8 @@ const CreateRecipe = () => {
 
     const compileRecipe = (e) => {
         e.preventDefault()
+        setIngredients([])
+        setInstructions([])
         let ingredientsNode = ingredientEl.current.childNodes; 
         let instructionsNode = instructionsRef.current.childNodes; 
         instructionsArr = Array.from(instructionsNode)
@@ -181,6 +183,8 @@ const CreateRecipe = () => {
                             <option value={13}>13</option>
                             <option value={14}>14</option>
                             <option value={15}>15</option>
+                            <option value={16}>16</option>
+                            <option value={17}>17</option>
                         </select>
                     </div>
                     <label>Ingredients:</label>
@@ -205,22 +209,24 @@ const CreateRecipe = () => {
                     <button onClick={((e) => handleBack(e))} className='back-button'>Back</button>
                 </div>
                 <div className={count === 3 ? 'recipe-preview' : 'recipe-preview hide'}>
-                    <h1>{name}</h1>
-                    <h3>{author}</h3>
-                    <h4>{description} - {time}</h4>
-                    {ingredients.map(item => (
+                    <div className='recipe-preview-content'>
+                        <h1>{name}</h1>
+                        <h3>{author}</h3>
+                        <h4>{description} - {time}</h4>
                         <ul>
-                            <li>{item}</li>
+                            {ingredients.map(item => (
+                                <li>{item}</li>
+                            ))}
                         </ul>
-                    ))}
-                    {instructions.map(item => (
                         <ol>
-                            <li>{item}</li>
+                            {instructions.map(item => (
+                                <li>{item}</li>
+                            ))}
                         </ol>
-                    ))}
-                    <p>{notes}</p>
-                    <button type='submit' onClick={((e) => handleSubmit(e))}>Add New Recipe</button>
-                    <button onClick={((e) => handleBack(e))} className='back-button'>Back</button>
+                        <p>*{notes}</p>
+                        <button type='submit' onClick={((e) => handleSubmit(e))}>Add New Recipe</button><br></br>
+                        <button onClick={((e) => handleBack(e))} className='back-button'>Back</button>
+                    </div>
                 </div>
             </form>
         </div>
