@@ -55,6 +55,10 @@ const CreateRecipe = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if(!user) {
+            return
+        }
+
         const recipe = { name, author, description, time, ingredients, instructions, notes }
 
         const response = await fetch('http://localhost:4000/recipes', {
@@ -137,7 +141,6 @@ const CreateRecipe = () => {
 
     return ( 
         <div className='create-container'>
-            <h2>Your New Recipe</h2>
             <form className='create-form'>
                 <div className={count === 0 ? 'recipe-carousel one' : 'recipe-carousel one hide'}>
                     <label>Name:</label>

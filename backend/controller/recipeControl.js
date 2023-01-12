@@ -2,11 +2,10 @@ const Recipe = require('../models/recipes');
 const mongoose = require('mongoose'); 
 
 const getAllRecipes = async (req, res) => {
+    
+    const recipe = await Recipe.find({}).sort({ name: 1 })
 
-    res.json({mssg: 'All recipes retrieved'})
-    // const quiz = await Recipe.find({}).sort({ name: 1 })
-
-    // res.status(200).json(quiz); 
+    res.status(200).json(recipe); 
 }
 
 const getRecipe = async (req, res) => {

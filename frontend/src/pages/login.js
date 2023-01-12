@@ -1,24 +1,28 @@
 import { useState } from 'react'
 import { useLogin } from '../hooks/useLogin' 
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
-    const { login, isLoading, error }  = useLogin(); 
+    const { login, isLoading, error }  = useLogin();
+    const navigate = useNavigate(); 
+     
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         await login(email, password)
-
-        console.log(error)
+        if(login) {
+            navigate('/')
+        }
     }
 
     return ( 
-        <div>
-            <form className='login' onSubmit={handleSubmit}>
-                <h3>Login</h3>
+        <div className='login-container'>
+            <form className='login create-form recipe-carousel' onSubmit={handleSubmit}>
+                <h2>Welcome Back!</h2>
                 <label>Email:</label>
                 <input type="email"
                 onChange={(e) => setEmail(e.target.value)}

@@ -13,20 +13,38 @@ body {
   font-family: 'Zilla Slab', serif;
 }
 
+#navbar { 
+  display: flex; 
+  flex-direction: row;
+  padding: 5vh; 
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+
+#navbar img {
+  width: 15vw;  
+  height: auto; 
+}
+
 #navbar ul{
   display: flex;
   flex-direction: row;
   list-style: none;
   justify-content: flex-end;
-  margin-right: 10rem; 
-  gap: 10rem; 
-  padding: 15px; 
+  align-items: center; 
+  gap: 5rem; 
+  padding: 5px;
+   
 }
 
 #navbar ul a{
   text-decoration: none;
   font-size: 2rem;
   font-weight: 400; 
+}
+
+#navbar form input {
+  width: 20vw; 
+  padding: 1vh;
 }
 
 .home-image {
@@ -36,6 +54,13 @@ body {
 .home-image img{
   width: 35vw; 
   height: auto; 
+}
+
+.login-container {
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  height: 50vh; 
 }
 
 .create-container h2 {

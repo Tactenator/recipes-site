@@ -3,11 +3,11 @@ const recipeControl = require('../controller/recipeControl')
 const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router(); 
-
+ 
 router.use(requireAuth)
 
 //get recipes 
-router.get('/', recipeControl.getAllRecipes); 
+router.get('/', recipeControl.getAllRecipes);
 
 //get one recipe
 router.get('/:id', recipeControl.getRecipe); 
