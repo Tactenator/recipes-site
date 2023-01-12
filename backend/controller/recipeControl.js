@@ -2,8 +2,9 @@ const Recipe = require('../models/recipes');
 const mongoose = require('mongoose'); 
 
 const getAllRecipes = async (req, res) => {
+    const user_id = req.user._id
     
-    const recipe = await Recipe.find({}).sort({ name: 1 })
+    const recipe = await Recipe.find({ user_id }).sort({ name: 1 })
 
     res.status(200).json(recipe); 
 }
@@ -25,10 +26,11 @@ const getRecipe = async (req, res) => {
 }
 
 const createRecipe = async (req, res) => {
+    const user_id = req.user._id
     const { name, author, description, time, ingredients, instructions, notes } = req.body; 
 
     try{
-        const recipe = await Recipe.create({ name, author, description, time, ingredients, instructions, notes })
+        const recipe = await Recipe.create({ name, author, description, time, ingredients, instructions, notes, user_id })
         res.status(200).json(recipe);
     }
     catch (error) {
