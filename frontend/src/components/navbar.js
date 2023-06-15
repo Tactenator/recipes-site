@@ -24,7 +24,6 @@ const Navbar = () => {
                 </form>
                 <Link to='/'><li>Home</li></Link>
                 <Link to='/recipes'><li>Recipes</li></Link>
-                <Link to='/createRecipes'>New Recipe</Link>
                 {!user && (
                     <ul>
                         <Link to='/users/login'><li>Login</li></Link>
@@ -33,6 +32,7 @@ const Navbar = () => {
                 )}
                 {user && (
                 <div>
+                    <Link to='/createRecipes'>New Recipe</Link>
                     <h4>{user.email}</h4>
                     <button onClick={handleLogout}>Log Out</button>
                 </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import { Convert } from 'mongo-image-converter'
 
 const CreateRecipe = () => {
 
@@ -14,6 +15,8 @@ const CreateRecipe = () => {
     const [ notes, setNotes ] = useState('')
     const [count, setCount ] = useState(0)
     const [ displayed, setDisplayed ] = useState(); 
+    const [ file, setFile ] = useState()
+    const [icon, setIcon] = useState()
 
     const displayArr = []; 
     let ingredientArr = [];
@@ -58,8 +61,7 @@ const CreateRecipe = () => {
         if(!user) {
             return
         }
-
-        const recipe = { name, author, description, time, ingredients, instructions, notes }
+        const recipe = { name, author, description, time, file, ingredients, instructions, notes }
 
         const response = await fetch('http://localhost:4000/recipes', {
             method: 'POST',
@@ -139,6 +141,28 @@ const CreateRecipe = () => {
         handleNext(e)
     }
 
+    const handleFile = async (e) =>
+    {
+        const newFile = e.target.files; 
+        
+        setIcon(URL.createObjectURL(newFile[0]));
+        setFile(newFile[0]);
+        try{
+            const convertedImage = await Convert(file)
+            if( convertedImage ) {
+                
+                setFile(convertedImage);
+            }
+            else{
+                console.log("This is not an image");
+            }
+        }
+        catch (error) {
+            console.warn(error.message)
+        }
+        
+    }
+
     return ( 
         <div className='create-container'>
             <form className='create-form'>
@@ -152,8 +176,16 @@ const CreateRecipe = () => {
                     onChange={((e) => setAuthor(e.target.value))}
                     value={author}></input>
 
+                    <label>Icon:</label>
+                    <div className="icon-container">
+                        <input type="file" onChange={handleFile}></input>
+                        <div className="icon">
+                            <img src={icon} style={{ height: '10vh', width: '10vh' }}alt="Quiz Icon Here"></img>
+                        </div>
+                    </div>
+
                     <label>Description:</label>
-                    <input type='text' 
+                    <input type='text' maxLength="90"
                     onChange={((e) => setDescription(e.target.value))}
                     value={description}></input>
 
@@ -214,8 +246,9 @@ const CreateRecipe = () => {
                 <div className={count === 3 ? 'recipe-preview' : 'recipe-preview hide'}>
                     <div className='recipe-preview-content'>
                         <h1>{name}</h1>
-                        <h3>{author}</h3>
+                        <h3>By {author}</h3>
                         <h4>{description} - {time}</h4>
+                        <img src={icon} style={{ height: 'auto', width: '60%' }} alt="Recipe icon preview"></img>
                         <ul>
                             {ingredients.map(item => (
                                 <li>{item}</li>

@@ -11,9 +11,13 @@ const userRoutes = require('./router/users');
 const app = express(); 
 
 //middleware
-app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
+
+
+app.use(express.json({limit: '50mb', extended: true}));
+app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(express.json());
 
 
 app.use(function (req, res, next) {

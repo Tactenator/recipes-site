@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import { Link } from 'react-router-dom'
 
 const Recipes = () => {
 
@@ -17,7 +18,7 @@ const Recipes = () => {
                 setData(recipes)
             }
             else {
-                console.log('penuis')
+                console.log('NOPE')
             }
         }
         if(user)
@@ -28,7 +29,19 @@ const Recipes = () => {
 
     return ( 
         <div>
-            Penis
+            <div className='recipeDetails-container'>
+                {data && data.map(item => (
+                    <div className='recipe-card'>
+                        <Link to={`${item._id}`}>
+                            <img src={item.file}  alt="icon"></img>
+                        </Link>
+                        <span>{item.author}</span>
+                        <div className='recipe-card-description'>
+                            <p>{item.description}</p>
+                        </div>
+                    </div>
+            ))}
+            </div>
         </div>
      );
 }

@@ -27,10 +27,10 @@ const getRecipe = async (req, res) => {
 
 const createRecipe = async (req, res) => {
     const user_id = req.user._id
-    const { name, author, description, time, ingredients, instructions, notes } = req.body; 
+    const { name, author, description, time, file, ingredients, instructions, notes } = req.body; 
 
     try{
-        const recipe = await Recipe.create({ name, author, description, time, ingredients, instructions, notes, user_id })
+        const recipe = await Recipe.create({ name, author, description, time, file, ingredients, instructions, notes, user_id })
         res.status(200).json(recipe);
     }
     catch (error) {
