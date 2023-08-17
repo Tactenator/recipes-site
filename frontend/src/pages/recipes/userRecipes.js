@@ -9,11 +9,9 @@ const Recipes = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const response  = await fetch('http://localhost:4000/recipes'
-            // , 
-            // {
-            //     headers: {'Authorization': `Bearer ${user.token}`},
-            // }
+            const response  = await fetch('http://localhost:4000/recipes', {
+                headers: {'Authorization': `Bearer ${user.token}`},
+            }
             )
             const recipes = await response.json(); 
             if(response.ok){
@@ -24,10 +22,10 @@ const Recipes = () => {
                 console.log('NOPE')
             }
         }
-        // if(user)
-        // {
-        //     fetchData()
-        // }
+        if(user)
+        {
+            fetchData()
+        }
         fetchData()
     },[])
 

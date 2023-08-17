@@ -15,10 +15,9 @@ const RecipeDetails = () => {
     const { id } = useParams();
 
     const fetchData = async () => {
-        const response = await fetch('http://localhost:4000/recipes/' + id, {
-            headers: {'Authorization': `Bearer ${user.token}`},
-        });
+        const response = await fetch('http://localhost:4000/recipes/' + id,)
         const data = await response.json(); 
+        console.log(user)
         setData(data) 
     }
 
