@@ -35,7 +35,7 @@ const Recipes = () => {
         <div>
             <div className='recipeDetails-container'>
                 {data && data.map(item => (
-                    <div className='recipe-card'>
+                    <div key={item._id} className='recipe-card'>
                         <Link to={`${item._id}`}>
                             <img src={item.file}  alt="icon"></img>
                         </Link>

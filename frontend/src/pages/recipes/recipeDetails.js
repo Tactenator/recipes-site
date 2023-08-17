@@ -17,7 +17,6 @@ const RecipeDetails = () => {
     const fetchData = async () => {
         const response = await fetch('http://localhost:4000/recipes/' + id,)
         const data = await response.json(); 
-        console.log(user)
         setData(data) 
     }
 
@@ -45,12 +44,12 @@ const RecipeDetails = () => {
                     <h4>{data.description} - {data.time}</h4>
                     <ul>
                         {data.ingredients.map(item => (
-                            <li>{item}</li>
+                            <li key={item}>{item}</li>
                         ))}
                     </ul>
                     <ol>
                         {data.instructions.map(item => (
-                            <li>{item}</li>
+                            <li key={item}>{item}</li>
                         ))}
                     </ol>
                     <p>*{data.notes}</p>
